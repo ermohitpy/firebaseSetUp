@@ -1,6 +1,6 @@
 import { Button, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { downloadDoc, trackApplyLoanEvent } from '../analyticsServices';
+import { downloadDoc, trackApplyLoanEvent } from '../services/analyticsServices';
 
 const Analytics = () => {
 
@@ -9,8 +9,8 @@ const Analytics = () => {
             <Text style={styles.txt}>Analytics</Text>
             <View style={styles.main}>
                 <Button title='Apply Loan' onPress={trackApplyLoanEvent} />
-                <View style={{height:30}}></View>
-                <Button title='Log Event with Params' onPress={downloadDoc}/>
+                <View style={{ height: 30 }} />
+                <Button title='Log Event with Params' onPress={downloadDoc} />
             </View>
         </View>
     )
