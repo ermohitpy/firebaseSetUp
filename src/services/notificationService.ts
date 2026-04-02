@@ -1,10 +1,10 @@
-import { AuthorizationStatus, getMessaging, requestPermission } from '@react-native-firebase/messaging';
+import { AuthorizationStatus, getMessaging, getToken, onMessage, onTokenRefresh, requestPermission } from '@react-native-firebase/messaging';
 import { PermissionsAndroid, Platform } from 'react-native';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 
-export async function requestUserPermission() {
-    const messagingInstance = getMessaging();
+const messagingInstance = getMessaging();
 
+export async function requestUserPermission() {
     const authStatus = await requestPermission(messagingInstance);
     const isEnabled =
         authStatus === AuthorizationStatus.AUTHORIZED ||
@@ -32,7 +32,8 @@ export async function requestUserPermission() {
 }
 
 export async function getFCMToken() {
-    const token = await getMessaging().getToken();
+    if (Platform.OS === 'ios') {return 'iOS need APNS certificate to work.';}
+    const token = await getToken(messagingInstance);
     console.log('FCM Token:', token);
     return token;
 }
@@ -47,7 +48,7 @@ export async function createNotificationChannel() {
 }
 
 export function foregroundNotificationListener() {
-    return getMessaging().onMessage(async remoteMessage => {
+    return onMessage(messagingInstance, async remoteMessage => {
         await notifee.displayNotification({
             title: remoteMessage?.notification?.title,
             body: remoteMessage?.notification?.body,
@@ -59,9 +60,8 @@ export function foregroundNotificationListener() {
 }
 
 export function tokenRefreshListener() {
-    return getMessaging().onTokenRefresh(token => {
+    return onTokenRefresh(messagingInstance, token => {
         console.log('New token:', token);
         // send token to backend here
     });
 }
-
