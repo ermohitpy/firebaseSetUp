@@ -9,9 +9,11 @@ import {
   SafeAreaProvider,
   SafeAreaView,
 } from 'react-native-safe-area-context';
-import { foregroundNotificationListener, getFCMToken, requestUserPermission, tokenRefreshListener } from './src/services/notificationService';
-import { getMessaging } from '@react-native-firebase/messaging';
-import Analytics from './src/services/screens/Analytics';
+import { foregroundNotificationListener, getFCMToken, requestUserPermission, tokenRefreshListener } from './services/notificationService';
+import { getInitialNotification, getMessaging, onNotificationOpenedApp } from '@react-native-firebase/messaging';
+import Analytics from './screens/Analytics';
+
+const messagingInstance = getMessaging();
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -25,16 +27,14 @@ function App() {
       })
       .catch(console.error);
 
-    getMessaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log('Opened from quit state');
-        }
-      });
+    getInitialNotification(messagingInstance).then(remoteMessage => {
+      if (remoteMessage) {
+        console.log('Opened from quit state');
+      }
+    });
 
     const unsubscribeOpenedApp =
-      getMessaging().onNotificationOpenedApp(remoteMessage => {
+      onNotificationOpenedApp(messagingInstance, remoteMessage => {
         if (remoteMessage?.data?.screen === 'OrderDetails') {
           // do whatever you want i.e navigate user to OrderDetails screen
         }
@@ -57,7 +57,7 @@ function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <Analytics/>
+        <Analytics />
       </SafeAreaView>
     </SafeAreaProvider>
   );
