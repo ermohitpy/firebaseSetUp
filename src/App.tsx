@@ -9,31 +9,31 @@ import {
   SafeAreaProvider,
   SafeAreaView,
 } from 'react-native-safe-area-context';
-import { foregroundNotificationListener, getFCMToken, requestUserPermission, tokenRefreshListener } from './src/services/notificationService';
-import { getMessaging } from '@react-native-firebase/messaging';
+import { foregroundNotificationListener, getFCMToken, requestUserPermission, tokenRefreshListener } from './services/notificationService';
+import { getInitialNotification, getMessaging, onNotificationOpenedApp } from '@react-native-firebase/messaging';
+
+const messagingInstance = getMessaging();
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
     requestUserPermission()
-      .then(result => {
+      .then((result: any) => {
         if (result) {
           getFCMToken();
         }
       })
       .catch(console.error);
 
-    getMessaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log('Opened from quit state');
-        }
-      });
+    getInitialNotification(messagingInstance).then(remoteMessage => {
+      if (remoteMessage) {
+        console.log('Opened from quit state');
+      }
+    });
 
     const unsubscribeOpenedApp =
-      getMessaging().onNotificationOpenedApp(remoteMessage => {
+      onNotificationOpenedApp(messagingInstance, remoteMessage => {
         if (remoteMessage?.data?.screen === 'OrderDetails') {
           // do whatever you want i.e navigate user to OrderDetails screen
         }
