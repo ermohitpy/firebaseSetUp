@@ -13,11 +13,18 @@ import { foregroundNotificationListener, getFCMToken, requestUserPermission, tok
 import { getInitialNotification, getMessaging, onNotificationOpenedApp } from '@react-native-firebase/messaging';
 import RemoteConfigDashboard from './screens/RemoteConfigDashboard';
 import { setupRemoteConfig } from './services/remoteConfigService';
+import CrashlyticsDashboard from './screens/Crashlytics';
+import { getCrashlytics, setUserId } from '@react-native-firebase/crashlytics';
 
 const messagingInstance = getMessaging();
+const crashlyticsInstance = getCrashlytics();
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+
+  useEffect(()=>{
+    setUserId(crashlyticsInstance, 'user123');
+  },[])
 
   useEffect(() => {
     setupRemoteConfig();
@@ -62,7 +69,7 @@ function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <RemoteConfigDashboard />
+        <CrashlyticsDashboard />
       </SafeAreaView>
     </SafeAreaProvider>
   );
