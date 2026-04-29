@@ -15,6 +15,8 @@ import RemoteConfigDashboard from './screens/RemoteConfigDashboard';
 import { setupRemoteConfig } from './services/remoteConfigService';
 import CrashlyticsDashboard from './screens/Crashlytics';
 import { getCrashlytics, setUserId } from '@react-native-firebase/crashlytics';
+import Login from './screens/Auth/Dashboard';
+import Dashboard from './screens/Auth/Dashboard';
 
 const messagingInstance = getMessaging();
 const crashlyticsInstance = getCrashlytics();
@@ -22,9 +24,9 @@ const crashlyticsInstance = getCrashlytics();
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
-  useEffect(()=>{
+  useEffect(() => {
     setUserId(crashlyticsInstance, 'user123');
-  },[])
+  }, [])
 
   useEffect(() => {
     setupRemoteConfig();
@@ -69,7 +71,7 @@ function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <CrashlyticsDashboard />
+        <Dashboard />
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -80,6 +82,7 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'white'
   },
   txt: {
     color: 'white'
