@@ -9,31 +9,13 @@ import {
     Alert,
     Keyboard,
 } from 'react-native'
-import React, { useEffect, useState } from 'react';
-import LoggedIn from './LoggedIn';
-import { authInstance, signInWithEmailAndPassword, signUpWithEmailAndPassword } from '../../../services/authServices';
-import { onAuthStateChanged } from '@react-native-firebase/auth';
+import React, { useState } from 'react';
+import { signInWithEmailAndPassword, signUpWithEmailAndPassword } from '../../../services/authServices';
 
 export default function LoginWithEmail() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isSignUp, setIsSignUp] = useState<boolean>(false);
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(authInstance, user => {
-            if (user) {
-                setLoggedIn(true);
-            } else {
-                setLoggedIn(false);
-            }
-        });
-        return () => {
-            if (unsubscribe) {
-                unsubscribe();
-            }
-        }
-    }, []);
 
     const signIn = async () => {
         if (!email || !password) {
@@ -56,10 +38,6 @@ export default function LoginWithEmail() {
 
     const onPressSignUp = () => {
         setIsSignUp((p) => !p);
-    }
-
-    if (loggedIn) {
-        return <LoggedIn />
     }
 
     return (

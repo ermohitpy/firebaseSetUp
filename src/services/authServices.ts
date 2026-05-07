@@ -1,4 +1,5 @@
-import { getAuth } from "@react-native-firebase/auth";
+import { getAuth, signInWithPhoneNumber, signOut } from "@react-native-firebase/auth";
+import { Alert } from "react-native";
 
 export const authInstance = getAuth();
 
@@ -22,12 +23,31 @@ export const signUpWithEmailAndPassword = async (email: string, password: string
 
 export const logOut = async () => {
     try {
-        await authInstance.signOut();
+        await signOut(authInstance);
     } catch (error) {
-        throw error;
+        Alert.alert(error.message || 'Failed to log out. Please try again.');
     }
 }
 
 export const getCurrentUser = () => {
     return authInstance.currentUser;
+}
+
+export const signInWithPhoneNo = async (phoneNumber: string) => {
+    try {
+        const confirmationResult = await signInWithPhoneNumber(authInstance, phoneNumber);
+        return confirmationResult;
+    } catch (error) {
+        console.log('Error in signIn:', error);
+        Alert.alert(error.message || 'Failed to send OTP. Please try again.');
+    }
+}
+
+export const confirmOTP = async (confirmationResult: any, otp: string) => {
+    try {
+        const response = await confirmationResult.confirm(otp);
+        return response;
+    } catch (error) {
+        Alert.alert(error.message || 'Failed to confirm OTP. Please try again.');
+    }
 }

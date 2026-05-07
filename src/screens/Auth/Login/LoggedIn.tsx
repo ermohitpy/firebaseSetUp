@@ -4,7 +4,6 @@ import { getCurrentUser, logOut } from '../../../services/authServices'
 import { commonStyles } from '../../../CommonStyles';
 
 export default function LoggedIn() {
-
     const user = getCurrentUser();
 
     return (

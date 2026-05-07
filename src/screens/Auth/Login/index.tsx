@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LoginWithEmail from './LoginWithEmail'
 import { commonStyles } from '../../../CommonStyles'
+import LoginWithPhone from './LoginWithPhone'
+import { onAuthStateChanged } from '@react-native-firebase/auth'
+import { authInstance } from '../../../services/authServices'
+import LoggedIn from './LoggedIn'
 
 interface LoginProps {
     select: {
@@ -11,13 +15,29 @@ interface LoginProps {
 }
 
 export default function Login({ select }: LoginProps) {
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    
+        useEffect(() => {
+            const unsubscribe = onAuthStateChanged(authInstance, user => {
+                if (user) {
+                    setLoggedIn(true);
+                } else {
+                    setLoggedIn(false);
+                }
+            });
+            return () => {
+                if (unsubscribe) {
+                    unsubscribe();
+                }
+            }
+        }, []);
 
     const renderLoginComponent = () => {
         switch (select?.data?.id) {
             case 0:
                 return <LoginWithEmail />
-            // case 1:
-            //     return <Text>{'Login with Phone'}</Text>
+            case 1:
+                return <LoginWithPhone />
             // case 2:
             //     return <Text>{'Login Anonymously'}</Text>
             default:
@@ -28,6 +48,10 @@ export default function Login({ select }: LoginProps) {
                 );
         }
     }
+
+    if (loggedIn) {
+            return <LoggedIn />
+        }
 
     return (
         <View style={styles.container}>

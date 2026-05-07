@@ -118,6 +118,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     // for trigger crashlytics
     implementation("com.google.firebase:firebase-crashlytics")
+    // for the Firebase Authentication library
+    implementation("com.google.firebase:firebase-auth")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
