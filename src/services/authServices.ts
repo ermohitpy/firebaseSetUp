@@ -1,4 +1,4 @@
-import { getAuth, signInWithPhoneNumber, signOut } from "@react-native-firebase/auth";
+import { EmailAuthProvider, getAuth, linkWithCredential, signInAnonymously, signInWithPhoneNumber, signOut } from "@react-native-firebase/auth";
 import { Alert } from "react-native";
 
 export const authInstance = getAuth();
@@ -49,5 +49,30 @@ export const confirmOTP = async (confirmationResult: any, otp: string) => {
         return response;
     } catch (error) {
         Alert.alert(error.message || 'Failed to confirm OTP. Please try again.');
+    }
+}
+
+export const logInAnonymously = async () => {
+    try {
+        await signInAnonymously(authInstance);
+      } catch (e:any) {
+        console.log('====> Error in logInAnonymously:', e);
+        Alert.alert(e.message || 'Failed to login anonymously. Please try again.');
+      }
+};
+
+export const upgradeAnonymousUser = async (email: string, password: string) => {
+    try {
+        const credential = EmailAuthProvider.credential(email, password);
+        const user = authInstance.currentUser;
+        if (user) {
+            await linkWithCredential(user,credential);
+            Alert.alert('Success', 'Anonymous account upgraded successfully!', [{ text: 'OK' }]);
+        } else {
+            Alert.alert('Error', 'No anonymous user found to upgrade.');
+        }
+    } catch (error:any) {
+        console.log('====> Error in upgradeAnonymousUser:', error);
+        Alert.alert(error.message || 'Failed to upgrade account. Please try again.');
     }
 }

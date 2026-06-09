@@ -28,7 +28,7 @@ export default function LoginWithEmail() {
                 await signUpWithEmailAndPassword(email, password) :
                 await signInWithEmailAndPassword(email, password)
             if (response?.user) {
-                Alert.alert('Success', 'Logged in successfully!', [{ text: 'OK', onPress: () => setLoggedIn(true) }]);
+                Alert.alert('Success', 'Logged in successfully!', [{ text: 'OK' }]);
             }
         } catch (error: any) {
             console.error('Error signing in:', error)
@@ -42,19 +42,19 @@ export default function LoginWithEmail() {
 
     return (
         <KeyboardAvoidingView
-            style={styles.container}
+            style={emailStyles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
 
             {/* Form Card */}
-            <View style={styles.card}>
+            <View style={emailStyles.card}>
 
                 {/* Email Field */}
-                <View style={styles.fieldGroup}>
-                    <Text style={styles.label}>Email address</Text>
-                    <View style={styles.inputWrapper}>
+                <View style={emailStyles.fieldGroup}>
+                    <Text style={emailStyles.label}>Email address</Text>
+                    <View style={emailStyles.inputWrapper}>
                         <TextInput
-                            style={styles.input}
+                            style={emailStyles.input}
                             placeholder="you@example.com"
                             placeholderTextColor="#A0A0A0"
                             value={email}
@@ -67,13 +67,13 @@ export default function LoginWithEmail() {
                 </View>
 
                 {/* Password Field */}
-                <View style={styles.fieldGroup}>
-                    <View style={styles.labelRow}>
-                        <Text style={styles.label}>Password</Text>
+                <View style={emailStyles.fieldGroup}>
+                    <View style={emailStyles.labelRow}>
+                        <Text style={emailStyles.label}>Password</Text>
                     </View>
-                    <View style={styles.inputWrapper}>
+                    <View style={emailStyles.inputWrapper}>
                         <TextInput
-                            style={styles.input}
+                            style={emailStyles.input}
                             placeholder="Enter your password"
                             placeholderTextColor="#A0A0A0"
                             value={password}
@@ -84,17 +84,17 @@ export default function LoginWithEmail() {
                 </View>
 
                 {/* Sign In Button */}
-                <TouchableOpacity style={styles.signInButton} onPress={signIn}>
-                    <Text style={styles.signInText}>{isSignUp ? 'Sign up' : 'Sign in'}</Text>
+                <TouchableOpacity style={emailStyles.signInButton} onPress={signIn}>
+                    <Text style={emailStyles.signInText}>{isSignUp ? 'Sign up' : 'Sign in'}</Text>
                 </TouchableOpacity>
 
             </View>
 
             {/* Sign Up Footer */}
-            <View style={styles.footer}>
-                <Text style={styles.footerText}>{isSignUp ? 'Have an account? ' : 'Don\'t have an account? '}</Text>
+            <View style={emailStyles.footer}>
+                <Text style={emailStyles.footerText}>{isSignUp ? 'Have an account? ' : 'Don\'t have an account? '}</Text>
                 <TouchableOpacity onPress={onPressSignUp}>
-                    <Text style={styles.signUpText}>{isSignUp ? 'Sign in' : 'Sign up'}</Text>
+                    <Text style={emailStyles.signUpText}>{isSignUp ? 'Sign in' : 'Sign up'}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -102,7 +102,7 @@ export default function LoginWithEmail() {
     )
 }
 
-const styles = StyleSheet.create({
+export const emailStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5F4F0',

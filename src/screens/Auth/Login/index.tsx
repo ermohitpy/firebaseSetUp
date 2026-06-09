@@ -6,6 +6,7 @@ import LoginWithPhone from './LoginWithPhone'
 import { onAuthStateChanged } from '@react-native-firebase/auth'
 import { authInstance } from '../../../services/authServices'
 import LoggedIn from './LoggedIn'
+import LoginAnonymous from './LoginAnonymous'
 
 interface LoginProps {
     select: {
@@ -38,8 +39,8 @@ export default function Login({ select }: LoginProps) {
                 return <LoginWithEmail />
             case 1:
                 return <LoginWithPhone />
-            // case 2:
-            //     return <Text>{'Login Anonymously'}</Text>
+            case 2:
+                return <LoginAnonymous />
             default:
                 return (
                     <View style={commonStyles.centeralizedContainer}>
